@@ -6,9 +6,11 @@
 /*   By: bbrassar <bbrassar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 04:25:27 by bbrassar          #+#    #+#             */
-/*   Updated: 2022/04/20 04:41:18 by bbrassar         ###   ########.fr       */
+/*   Updated: 2022/05/10 12:06:55 by bbrassar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "Scalar.hpp"
 
 #include <iostream>
 
@@ -26,7 +28,7 @@ static bool	_checkArgs(int argc)
 
 static void	_execute(std::string const &value)
 {
-	std::cout << value << std::endl;
+	std::cout << Scalar(value) << std::endl;
 }
 
 int	main(int argc, char const *argv[])

@@ -6,7 +6,7 @@
 /*   By: bbrassar <bbrassar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 18:19:54 by bbrassar          #+#    #+#             */
-/*   Updated: 2022/05/02 19:40:44 by bbrassar         ###   ########.fr       */
+/*   Updated: 2022/05/10 14:44:27 by bbrassar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,34 +19,47 @@
 
 Scalar::Scalar(void) :
 	val(0),
-	valid(true)
+	valid(true),
+	infinite(false),
+	nan(false)
 {
 }
 
 Scalar::Scalar(Scalar const &x) :
 	val(x.val),
-	valid(true)
+	valid(x.valid),
+	infinite(x.infinite),
+	nan(x.nan)
 {
 }
 
 Scalar::Scalar(std::string const &s) :
 	val(0),
-	valid(true)
+	valid(true),
+	infinite(true),
+	nan(true)
 {
 	char	*end;
 
-	if (s == "inf" || s == "inff")
-		this->val = LIMIT_DOUBLE.infinity();
+	if (s == "inf" || s == "inff" || s == "+inf" || s == "+inff")
+		this->val = LIMIT_FLOAT.infinity();
 	else if (s == "-inf" || s == "-inff")
-		this->val = -LIMIT_DOUBLE.infinity();
-	else if (s == "nan" || s == "nanf")
-		this->val = LIMIT_DOUBLE.quiet_NaN();
-	else if (s.length() == 1 && !std::isdigit(s[0]))
-		this->val = static_cast<double>(s[0]);
+		this->val = -LIMIT_FLOAT.infinity();
+	else if (s == "nan" || s == "nanf" || s == "+nan" || s == "+nanf")
+		this->val = LIMIT_FLOAT.quiet_NaN();
+	else if (s == "-nan" || s == "-nanf")
+		this->val = -LIMIT_FLOAT.quiet_NaN();
 	else
 	{
-		this->val = std::strtod(s.c_str(), &end);
-		this->valid = (*end == 0 || (*end == 'f' && *(end + 1) == 0));
+		this->nan = false;
+		this->infinite = false;
+		if (s.length() == 1 && !std::isdigit(s[0]))
+			this->val = static_cast<double>(s[0]);
+		else
+		{
+			this->val = std::strtod(s.c_str(), &end);
+			this->valid = (*end == 0 || (*end == 'f' && *(end + 1) == 0));
+		}
 	}
 }
 
@@ -56,20 +69,23 @@ Scalar::~Scalar()
 
 Scalar &Scalar::operator=(Scalar const &x)
 {
-	if (this == &x)
-		return (*this);
-	this->val = x.val;
+	if (this != &x)
+	{
+		this->val = x.val;
+		this->valid = x.valid;
+		this->infinite = x.infinite;
+		this->nan = x.nan;
+	}
 	return (*this);
 }
 
 std::ostream &Scalar::printChar(std::ostream &os) const
 {
 	os << "char: ";
-	if (!this->valid
+	if (!this->valid || this->infinite || this->nan
 		|| this->val > LIMIT_CHAR.max()
-		|| this->val < LIMIT_CHAR.min()
-		|| this->val == LIMIT_DOUBLE.quiet_NaN()
-		|| this->val == -LIMIT_DOUBLE.quiet_NaN())
+		|| this->val < -LIMIT_CHAR.max() - 1
+		|| fabs(this->val - LIMIT_DOUBLE.quiet_NaN()) < LIMIT_DOUBLE.epsilon())
 		std::cout << "impossible";
 	else if (!std::isprint(static_cast<char>(this->val)))
 		std::cout << "non displayable";
@@ -81,10 +97,9 @@ std::ostream &Scalar::printChar(std::ostream &os) const
 std::ostream &Scalar::printInt(std::ostream &os) const
 {
 	os << "int: ";
-	if (!this->valid
-		|| std::abs(LIMIT_DOUBLE.quiet_NaN() - this->val) < LIMIT_DOUBLE.epsilon()
+	if (!this->valid || this->infinite || this->nan
 		|| this->val > LIMIT_INT.max()
-		|| this->val < LIMIT_INT.min())
+		|| this->val < -LIMIT_INT.max() - 1)
 		std::cout << "impossible";
 	else
 		std::cout << static_cast<int>(this->val);
@@ -94,12 +109,14 @@ std::ostream &Scalar::printInt(std::ostream &os) const
 std::ostream &Scalar::printFloat(std::ostream &os) const
 {
 	os << "float: ";
-	if (!this->valid || this->val > LIMIT_FLOAT.max() || this->val < -LIMIT_FLOAT.max())
+	if (!this->valid || (!this->infinite && !this->nan && (this->val > LIMIT_FLOAT.max() || this->val < -LIMIT_FLOAT.max())))
 		std::cout << "impossible";
 	else
 	{
 		std::cout << this->val;
-		if (std::abs(this->val - std::floor(this->val)) < LIMIT_DOUBLE.epsilon())
+		if (!this->infinite
+			&& !this->nan
+			&& std::abs(this->val - std::floor(this->val)) < LIMIT_FLOAT.epsilon())
 			std::cout << ".0";
 		os << "f";
 	}
@@ -114,7 +131,9 @@ std::ostream &Scalar::printDouble(std::ostream &os) const
 	else
 	{
 		std::cout << this->val;
-		if (std::abs(this->val - std::floor(this->val)) < LIMIT_DOUBLE.epsilon())
+		if (!this->infinite
+			&& !this->nan
+			&& std::abs(this->val - std::floor(this->val)) < LIMIT_DOUBLE.epsilon())
 			std::cout << ".0";
 	}
 	return (os << std::endl);

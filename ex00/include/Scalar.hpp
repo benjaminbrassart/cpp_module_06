@@ -6,7 +6,7 @@
 /*   By: bbrassar <bbrassar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 18:11:01 by bbrassar          #+#    #+#             */
-/*   Updated: 2022/05/02 19:01:08 by bbrassar         ###   ########.fr       */
+/*   Updated: 2022/05/10 14:44:38 by bbrassar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ class Scalar
 	private:
 	double	val;
 	bool	valid;
+	bool	infinite;
+	bool	nan;
 
 	public:
 	Scalar(void);

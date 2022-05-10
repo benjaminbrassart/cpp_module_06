@@ -6,7 +6,7 @@
 #    By: bbrassar <bbrassar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 04:18:05 by bbrassar          #+#    #+#              #
-#    Updated: 2022/04/20 04:25:37 by bbrassar         ###   ########.fr        #
+#    Updated: 2022/05/10 12:07:56 by bbrassar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ RM					= rm -f
 DIR_SRC				= src
 DIR_OBJ				= obj
 
-SRC					= main.cpp
+SRC					= main.cpp Scalar.cpp
 OBJ					= $(SRC:%.cpp=$(DIR_OBJ)/%.o)
 DEP					= $(OBJ:.o=.d)
 
