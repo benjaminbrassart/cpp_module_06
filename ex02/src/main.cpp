@@ -6,7 +6,7 @@
 /*   By: bbrassar <bbrassar@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/20 08:28:51 by bbrassar          #+#    #+#             */
-/*   Updated: 2022/04/20 08:54:57 by bbrassar         ###   ########.fr       */
+/*   Updated: 2022/05/10 11:53:57 by bbrassar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	main(void)
 		<< std::endl << std::endl;
 	for (int i = 0; i < BASE_COUNT; ++i)
 	{
-		std::cout << "[" << i + 1 << "] ";
+		std::cout << "[" << i << "] ";
 		bases[i] = generate();
 	}
 	std::cout
@@ -38,7 +38,7 @@ int	main(void)
 		<< std::endl << std::endl;
 	for (int i = 0; i < BASE_COUNT; ++i)
 	{
-		std::cout << "[" << i + 1 << "] ";
+		std::cout << "[" << i << "] ";
 		identify(*bases[i]);
 	}
 	std::cout
@@ -47,7 +47,7 @@ int	main(void)
 		<< std::endl << std::endl;
 	for (int i = 0; i < BASE_COUNT; ++i)
 	{
-		std::cout << "[" << i + 1 << "] ";
+		std::cout << "[" << i << "] ";
 		identify(bases[i]);
 	}
 	for (int i = 0; i < BASE_COUNT; ++i)

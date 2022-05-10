@@ -6,14 +6,21 @@
 #    By: bbrassar <bbrassar@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/20 08:17:11 by bbrassar          #+#    #+#              #
-#    Updated: 2022/04/20 08:46:42 by bbrassar         ###   ########.fr        #
+#    Updated: 2022/05/10 12:05:32 by bbrassar         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME				= identify
 
 CXX					= c++
-CXXFLAGS			= -Wall -Werror -Wextra -c -MMD -MP -Iinclude -std=c++98
+CXXFLAGS			+= -Wall
+CXXFLAGS			+= -Werror
+CXXFLAGS			+= -Wextra
+CXXFLAGS			+= -c
+CXXFLAGS			+= -MMD -MP
+CXXFLAGS			+= -Iinclude
+CXXFLAGS			+= -std=c++98
+# CXXFLAGS			+= -DGENERATE_INVALID
 
 RM					= rm -f
 
